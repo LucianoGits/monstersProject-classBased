@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import CardListComponents from './Components/card-list/CardListComponent';
 
 class App extends Component {
   // in a class component we use a "constructor" followed by "super()" and we call a useState by using the keyword "this.state"
@@ -8,6 +9,7 @@ class App extends Component {
     // this is setting a state
     this.state = {
       monsters: [],
+      searchField: '',
     };
   }
 
@@ -25,15 +27,38 @@ class App extends Component {
       );
   }
 
+  // this is an arrow function(more accurately it is a METHOD) for the searching inputs and we will insert it on the "onChange" that is in the serach box
+  onSearchChange = (e) => {
+    //we take the 'searchField' from the state and we pass in the event paramenter and set it to lower case
+    const searchField = e.target.value.toLocaleLowerCase();
+
+    // here we update the state or setState to our newly made searchField
+    this.setState(() => {
+      return { searchField };
+    });
+  };
+
+  //rendering part
   render() {
+    // this is "destructuring" because instead of using "this." everywhere we can just call the methods where we want to use them e.g instead of writing "this.state.monsters" we can just write "monsters"
+    const { monsters, searchField } = this.state;
+    const { onSearchChange } = this;
+    //its a function that creates new array from the monsters array and will later be used to map the monsters names
+    const filteredMonsters = monsters.filter((monsterNames) => {
+      return monsterNames.name.toLocaleLowerCase().includes(searchField);
+    });
+
     return (
       <div className="App">
-        {/* this is how you callBack of the state. we map how state which in this
-        case it would be the empty array of 'monsters' */}
-        {this.state.monsters.map((monsters) => {
-          // we want the monsters to return a map in a div and we set the key inside the div
-          return <div key={monsters.id}>{monsters.name}</div>;
-        })}
+        <input
+          className="search-box"
+          type="search"
+          placeholder="Search Monsters"
+          //this "onChange"property is an anonymous function(a function that is not stored anywhere in a variable)  that will allow us to get a result when there is any type of change on the input box
+          onChange={onSearchChange}
+        />
+
+        <CardListComponents monsters={filteredMonsters} />
       </div>
     );
   }
