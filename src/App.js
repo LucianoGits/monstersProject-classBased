@@ -1,5 +1,7 @@
 import { Component } from 'react';
-import CardListComponents from './Components/card-list/CardListComponent';
+import CardList from './Components/card-list/CardListComponent';
+import Header from './Components/header/Header';
+import SearchBox from './Components/search-box/SearchBoxComponent';
 
 class App extends Component {
   // in a class component we use a "constructor" followed by "super()" and we call a useState by using the keyword "this.state"
@@ -40,6 +42,7 @@ class App extends Component {
 
   //rendering part
   render() {
+    //console.log('render from AppJs');
     // this is "destructuring" because instead of using "this." everywhere we can just call the methods where we want to use them e.g instead of writing "this.state.monsters" we can just write "monsters"
     const { monsters, searchField } = this.state;
     const { onSearchChange } = this;
@@ -50,15 +53,13 @@ class App extends Component {
 
     return (
       <div className="App">
-        <input
-          className="search-box"
-          type="search"
-          placeholder="Search Monsters"
-          //this "onChange"property is an anonymous function(a function that is not stored anywhere in a variable)  that will allow us to get a result when there is any type of change on the input box
-          onChange={onSearchChange}
+        <Header className="header" />
+        <SearchBox
+          onChangeHandler={onSearchChange}
+          placeHolder="search the monsters"
+          className="monsters-search-box"
         />
-
-        <CardListComponents monsters={filteredMonsters} />
+        <CardList monsters={filteredMonsters} />
       </div>
     );
   }
